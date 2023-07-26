@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,6 +15,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String buttonText = "Click";
+  int navIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +28,56 @@ class _MyAppState extends State<MyApp> {
         ),
         // Body
         body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                buttonText = "Clicked";
-              });
-            },
-            child: Text(buttonText),
-          ),
+          child: navIndex == 0
+              ? Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.blueGrey,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.black,
+                            backgroundColor: Colors.blue),
+                        onPressed: () {
+                          setState(
+                            () {
+                              buttonText = "Clicked";
+                            },
+                          );
+                        },
+                        child: Text(
+                          buttonText,
+                        ),
+                      ),
+                      const Text(
+                        "Click the button!",
+                        style: TextStyle(color: Colors.orange),
+                      ),
+                    ],
+                  ),
+                )
+              : Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text("Welcome to settings!"),
+                      ElevatedButton(
+                        onPressed: () {
+                          print("Settings changed!");
+                        },
+                        child: const Text("Click to change settings"),
+                      ),
+                      Image.network(
+                          'https://i.etsystatic.com/21042145/r/il/d64455/4200288913/il_fullxfull.4200288913_69e2.jpg'),
+                    ],
+                  )),
         ),
         // Bottom NavBar
         bottomNavigationBar: BottomNavigationBar(
@@ -46,6 +91,12 @@ class _MyAppState extends State<MyApp> {
               icon: Icon(Icons.settings),
             ),
           ],
+          currentIndex: navIndex,
+          onTap: (int index) {
+            setState(() {
+              navIndex = index;
+            });
+          },
         ),
       ),
     );
